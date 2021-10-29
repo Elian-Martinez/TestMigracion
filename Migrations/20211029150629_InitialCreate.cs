@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Test_Migracion_.Migrations
 {
-    public partial class Initial : Migration
+    public partial class InitialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -34,11 +34,18 @@ namespace Test_Migracion_.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Description = table.Column<string>(type: "nvarchar(75)", maxLength: 75, nullable: false),
                     Estate = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
-                    Creation = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    Creation = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    PersonId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Requests", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Requests_Person_PersonId",
+                        column: x => x.PersonId,
+                        principalTable: "Person",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -65,18 +72,25 @@ namespace Test_Migracion_.Migrations
                         column: x => x.RequestsId,
                         principalTable: "Requests",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Equipment_PersonId",
                 table: "Equipment",
-                column: "PersonId");
+                column: "PersonId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Equipment_RequestsId",
                 table: "Equipment",
-                column: "RequestsId");
+                column: "RequestsId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Requests_PersonId",
+                table: "Requests",
+                column: "PersonId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -85,10 +99,10 @@ namespace Test_Migracion_.Migrations
                 name: "Equipment");
 
             migrationBuilder.DropTable(
-                name: "Person");
+                name: "Requests");
 
             migrationBuilder.DropTable(
-                name: "Requests");
+                name: "Person");
         }
     }
 }

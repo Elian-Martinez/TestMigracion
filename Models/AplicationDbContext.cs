@@ -23,18 +23,23 @@ namespace Test_Migracion_.Models
             modelBuilder.Entity<Person>().Property(x => x.PersonAdress).HasColumnName("Adress").HasMaxLength(35).IsRequired();
             modelBuilder.Entity<Person>().Property(x => x.PersonGender).HasColumnName("Gender").HasMaxLength(9).IsRequired();
             modelBuilder.Entity<Person>().Property(x => x.PersonPhoto).HasColumnName("Photo").IsRequired();
+            modelBuilder.Entity<Person>().HasOne<Equipment>(x => x.Equipment).WithOne(x => x.Person).HasForeignKey<Equipment>(x => x.PersonId);
 
             //Requests DbSet
             modelBuilder.Entity<Requests>().Property(x => x.RequestsId).HasColumnName("Id").IsRequired();
             modelBuilder.Entity<Requests>().Property(x => x.RequestsName).HasColumnName("Description").HasMaxLength(75).IsRequired();
             modelBuilder.Entity<Requests>().Property(x => x.RequestsEstate).HasColumnName("Estate").HasMaxLength(10).IsRequired();
             modelBuilder.Entity<Requests>().Property(x => x.RequestsCreation).HasColumnName("Creation").IsRequired();
+            modelBuilder.Entity<Requests>().HasOne<Person>(x => x.Person).WithMany(x => x.Requests).HasForeignKey(x => x.PersonId);
+            modelBuilder.Entity<Requests>().HasOne<Equipment>(x => x.Equipment).WithOne(x => x.Requests).HasForeignKey<Equipment>(x => x.RequestsId);
 
             //Equipment DbSet
             modelBuilder.Entity<Equipment>().Property(x => x.EquipmentId).HasColumnName("Id").IsRequired();
             modelBuilder.Entity<Equipment>().Property(x => x.PersonId).IsRequired();
             modelBuilder.Entity<Equipment>().Property(x => x.RequestsId).IsRequired();
             modelBuilder.Entity<Equipment>().Property(x => x.CreationDate).HasColumnName("CreationDate").IsRequired();
+            
+            
         }
         public AplicationDbContext(DbContextOptions<AplicationDbContext> options) : base(options)
         {

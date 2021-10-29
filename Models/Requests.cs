@@ -11,5 +11,8 @@ namespace Test_Migracion_.Models
             public String RequestsName { get; set; }
             public String RequestsEstate { get; set; }
             public DateTime RequestsCreation { get; set; }
+            public Person Person { get; set; }
+            public Equipment Equipment { get; set; }
+            public int PersonId { get; set; }
     }
 }

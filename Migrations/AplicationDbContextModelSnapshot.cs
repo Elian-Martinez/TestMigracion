@@ -39,9 +39,11 @@ namespace Test_Migracion_.Migrations
 
                     b.HasKey("EquipmentId");
 
-                    b.HasIndex("PersonId");
+                    b.HasIndex("PersonId")
+                        .IsUnique();
 
-                    b.HasIndex("RequestsId");
+                    b.HasIndex("RequestsId")
+                        .IsUnique();
 
                     b.ToTable("Equipment");
                 });
@@ -105,6 +107,9 @@ namespace Test_Migracion_.Migrations
                         .HasColumnName("Id")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int>("PersonId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("RequestsCreation")
                         .HasColumnType("datetime2")
                         .HasColumnName("Creation");
@@ -123,26 +128,51 @@ namespace Test_Migracion_.Migrations
 
                     b.HasKey("RequestsId");
 
+                    b.HasIndex("PersonId");
+
                     b.ToTable("Requests");
                 });
 
             modelBuilder.Entity("Test_Migracion_.Models.Equipment", b =>
                 {
                     b.HasOne("Test_Migracion_.Models.Person", "Person")
-                        .WithMany()
-                        .HasForeignKey("PersonId")
+                        .WithOne("Equipment")
+                        .HasForeignKey("Test_Migracion_.Models.Equipment", "PersonId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Test_Migracion_.Models.Requests", "Requests")
-                        .WithMany()
-                        .HasForeignKey("RequestsId")
+                        .WithOne("Equipment")
+                        .HasForeignKey("Test_Migracion_.Models.Equipment", "RequestsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Person");
 
                     b.Navigation("Requests");
+                });
+
+            modelBuilder.Entity("Test_Migracion_.Models.Requests", b =>
+                {
+                    b.HasOne("Test_Migracion_.Models.Person", "Person")
+                        .WithMany("Requests")
+                        .HasForeignKey("PersonId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Person");
+                });
+
+            modelBuilder.Entity("Test_Migracion_.Models.Person", b =>
+                {
+                    b.Navigation("Equipment");
+
+                    b.Navigation("Requests");
+                });
+
+            modelBuilder.Entity("Test_Migracion_.Models.Requests", b =>
+                {
+                    b.Navigation("Equipment");
                 });
 #pragma warning restore 612, 618
         }
