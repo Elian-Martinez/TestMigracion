@@ -8,10 +8,12 @@ namespace Test_Migracion_.Models
 {
     public class Equipment
     {
-        public int EquipmentId;
-        public Person PersonId;
-        public Requests RequestsId;
-        public DateTime CreationDate;
+        public int EquipmentId { get; set; }
+        public Person Person { get; set; }
+        public int PersonId { get; set; }
+        public Requests Requests { get; set; }
+        public int RequestsId { get; set; }
+        public DateTime CreationDate { get; set; }
 
     }
 }

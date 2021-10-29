@@ -15,5 +15,12 @@ namespace Test_Migracion_.Models
         public string PersonAdress { get; set; }
         public string PersonGender { get; set; }
         public byte[] PersonPhoto { get; set; }
+        public Equipment Equipment { get; set; }
+
+        public List<Requests> Requests { get; set; }
+        public Person()
+        {
+            Requests = new List<Requests>();
+        }
     }
 }
